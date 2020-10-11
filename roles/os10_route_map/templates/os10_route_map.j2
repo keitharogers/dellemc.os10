@@ -204,11 +204,18 @@ route-map {{ vars.name }} permit 10
  no match {{ ip }} address prefix-list a
                   {% endif %}
                 {% endif %}
-		{% if match.as_path is defined %}
+		            {% if match.as_path is defined %}
                   {% if match.as_path %}
  match as-path {{ match.as_path }}
                   {% else %}
  no match as-path {{ match.as_path }}
+                  {% endif %}
+                {% endif %}
+                {% if match.community is defined %}
+                  {% if match.community %}
+ match community {{ match.community }}
+                  {% else %}
+ no match community {{ match.community }}
                   {% endif %}
                 {% endif %}
               {% endif %}

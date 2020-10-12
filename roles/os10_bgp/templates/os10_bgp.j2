@@ -689,6 +689,14 @@ router bgp {{ bgp_vars.asn }}
                       {% endif %}
                     {% endif %}
 
+                  {% if af.maximum_prefix is defined %}
+                      {% if af.maximum_prefix %}
+   maximum-prefix {{ af.maximum_prefix }}
+                      {% else %}
+   no maximum-prefix
+                      {% endif %}
+                    {% endif %}
+
                   {% if af.default_originate is defined %}
                    {% if af.default_originate %}
    default-originate

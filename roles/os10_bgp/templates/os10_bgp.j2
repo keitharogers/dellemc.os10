@@ -705,6 +705,23 @@ router bgp {{ bgp_vars.asn }}
                       {% endif %}
                     {% endif %}
 
+                  {% if af.distribute_list is defined and af.distribute_list %}
+                    {% if af.distribute_list.in is defined and af.distribute_list.in %}
+                      {% if af.distribute_list.in_state is defined and af.distribute_list.in_state == "absent" %}
+   no distribute-list {{ af.distribute_list.in }} in
+                  {% else %}
+   distribute-list {{ af.distribute_list.in }} in
+                    {% endif %}
+                  {% endif %}
+                  {% if af.distribute_list.out is defined and af.distribute_list.out %}
+                      {% if af.distribute_list.out_state is defined and af.distribute_list.out_state == "absent" %}
+   no distribute-list {{ af.distribute_list.out }} out
+                      {% else %}
+   distribute-list {{ af.distribute_list.out }} out
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+
                   {% endif %}
                 {% endif %}
               {% endfor %}
@@ -740,23 +757,7 @@ router bgp {{ bgp_vars.asn }}
   shutdown
               {% endif %}
             {% endif %}
-            {% if neighbor.distribute_list is defined and neighbor.distribute_list %}
-  address-family ipv4 unicast
-              {% if neighbor.distribute_list.in is defined and neighbor.distribute_list.in %}
-                 {% if neighbor.distribute_list.in_state is defined and neighbor.distribute_list.in_state == "absent" %}
-   no distribute-list {{ neighbor.distribute_list.in }} in
-                {% else %}
-   distribute-list {{ neighbor.distribute_list.in }} in
-                {% endif %}
-              {% endif %}
-              {% if neighbor.distribute_list.out is defined and neighbor.distribute_list.out %}
-               {% if neighbor.distribute_list.out_state is defined and neighbor.distribute_list.out_state == "absent" %}
-   no distribute-list {{ neighbor.distribute_list.out }} out
-                {% else %}
-   distribute-list {{ neighbor.distribute_list.out }} out
-                {% endif %}
-              {% endif %}
-            {% endif %}
+            
             {% if neighbor.sender_loop_detect is defined %}
   address-family ipv4 unicast
               {% if neighbor.sender_loop_detect %}
